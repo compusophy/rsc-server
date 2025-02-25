@@ -27,10 +27,10 @@ function getSecureWebSocketUrl(host = null, port = null) {
     const protocol = 'wss:';
     
     // Use provided host or default
-    const wsHost = host || 'shinkansen.proxy.rlwy.net';
+    const wsHost = host || 'rsc-server-production.up.railway.app';
     
     // Use provided port or default
-    const wsPort = port || 55656;
+    const wsPort = port || 43595;
     
     return `${protocol}//${wsHost}:${wsPort}`;
 }

@@ -141,7 +141,7 @@ class Server {
             this.handleConnection(socket);
         });
         
-        log.info(`listening for websocket connections on port ${port} (exposed via Railway TCP Proxy at shinkansen.proxy.rlwy.net:55656)`);
+        log.info(`listening for websocket connections on port ${port}`);
     }
 
     bindWebWorker() {
