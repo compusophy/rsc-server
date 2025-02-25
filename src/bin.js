@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 const pkg = require('../package');
 const process = require('process');
 const yargs = require('yargs');
-const { connectToDataServer } = require('./data-client');
+const { DataClient, connectToDataServer } = require('./data-client');
 const { loadConfig } = require('./config');
 
 // Now it's safe to use process

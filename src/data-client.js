@@ -260,4 +260,5 @@ function connectToDataServer() {
     return client;
 }
 
-module.exports = { connectToDataServer };
+// Export both the class and the function
+module.exports = { DataClient, connectToDataServer };
