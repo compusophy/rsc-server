@@ -1,10 +1,14 @@
 const { EventEmitter } = require('events');
 
 class BrowserSocket extends EventEmitter {
-    constructor(id, ip = '127.0.0.1') {
+    constructor(id, ip = null) {
         super();
         this.id = id;
-        this.remoteAddress = ip;
+        
+        // Use the provided IP or a default that works with Railway
+        // This ensures the socket uses the correct remote address
+        this.remoteAddress = ip || (typeof window !== 'undefined' && window.serverAddress) || 
+                             'rsc-server-production.up.railway.app';
     }
 
     write(data) {
@@ -26,4 +30,4 @@ class BrowserSocket extends EventEmitter {
     setTimeout() {}
 }
 
-module.exports = BrowserSocket;
+module.exports = BrowserSocket; 
