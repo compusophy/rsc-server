@@ -4,7 +4,7 @@
   "description": "runescape classic mmorpg game server emulator",
   "main": "src/server.js",
   "scripts": {
-    "start": "./src/bin.js | garnish",
+    "start": "node src/bin.js",
     "build-browser-dev": "browserify -t brfs src/browser-index.js > dist/browser.bundle.js",
     "build-browser": "npm run build-browser-dev && uglifyjs dist/browser.bundle.js > dist/browser.bundle.min.js"
   },
@@ -33,6 +33,7 @@
     "@2003scape/rsc-path-finder": "^1.1.1",
     "@2003scape/rsc-socket": "^1.0.7",
     "bole": "^4.0.0",
+    "canvas": "^3.1.0",
     "flat": "^5.0.2",
     "garnish": "^5.2.0",
     "js-quadtree": "^3.3.6",
