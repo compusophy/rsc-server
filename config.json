@@ -1,7 +1,7 @@
 {
     "dataServerTCP": "localhost:9001",
     "dataServerPassword": "test",
-    "port": 9001,
+    "port": 9002,
     "sockFile": null,
     "sqliteFile": "./rsc-data-server.sqlite",
     "backupDirectory": "./backups",

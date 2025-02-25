@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const Server = require('./server');
 const bole = require('bole');
 const fs = require('fs').promises;
 const pkg = require('../package');
 const process = require('process');
 const yargs = require('yargs');
+const { connectToDataServer } = require('./data-client');
 
 const log = require('bole')('bin');
 
@@ -45,4 +50,28 @@ bole.output({
 
     const server = new Server(config);
     await server.init();
+
+    // Use environment variables with fallbacks
+    const port = process.env.PORT || 9002;
+    const tcpPort = process.env.TCP_PORT || 43594;
+    const websocketPort = process.env.WEBSOCKET_PORT || 43595;
+
+    // Start your server
+    const tcpServer = startTCPServer(tcpPort);
+    const wsServer = startWebSocketServer(websocketPort);
+
+    // Connect to data server
+    const dataClient = connectToDataServer();
+
+    // Your server logic here...
+
+    function startTCPServer(port) {
+        // TCP server logic
+        console.log(`TCP server listening on port ${port}`);
+    }
+
+    function startWebSocketServer(port) {
+        // WebSocket server logic
+        console.log(`WebSocket server listening on port ${port}`);
+    }
 })();

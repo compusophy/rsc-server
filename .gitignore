@@ -2,3 +2,8 @@ node_modules/
 .npm
 .eslintcache
 .node_repl_history
+.env
+.env.local
+.env.development
+.env.test
+.env.production

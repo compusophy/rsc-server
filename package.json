@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/bin.js",
+    "dev": "NODE_ENV=development node src/bin.js",
     "build-browser-dev": "browserify -t brfs src/browser-index.js > dist/browser.bundle.js",
     "build-browser": "npm run build-browser-dev && uglifyjs dist/browser.bundle.js > dist/browser.bundle.min.js"
   },
