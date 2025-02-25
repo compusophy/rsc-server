@@ -1,6 +1,17 @@
 #!/usr/bin/env node
 
-// For local development only, not needed in production
+// Import all dependencies first
+const Server = require('./server');
+const bole = require('bole');
+const fs = require('fs').promises;
+const pkg = require('../package');
+const process = require('process');
+const yargs = require('yargs');
+const { connectToDataServer } = require('./data-client');
+const { loadConfig } = require('./config');
+
+// Now it's safe to use process
+// Only load dotenv in non-production environments
 if (process.env.NODE_ENV !== 'production') {
   try {
     require('dotenv').config();
@@ -8,16 +19,6 @@ if (process.env.NODE_ENV !== 'production') {
     console.log('No .env file found, using default environment');
   }
 }
-
-// Rest of your imports and code
-const process = require('process');
-const Server = require('./server');
-const bole = require('bole');
-const fs = require('fs').promises;
-const pkg = require('../package');
-const yargs = require('yargs');
-const { connectToDataServer } = require('./data-client');
-const { loadConfig } = require('./config');
 
 const log = require('bole')('bin');
 
@@ -49,36 +50,23 @@ bole.output({
 
     try {
         config = await loadConfig(argv.config);
+        log.info('Configuration loaded successfully');
+        log.debug('Config:', config);
     } catch (e) {
         process.exitCode = 1;
-        log.error(e);
+        log.error('Failed to load configuration:', e);
         return;
     }
 
-    const server = new Server(config);
-    await server.init();
-
-    // Use environment variables with fallbacks
-    const port = process.env.PORT || 9002;
-    const tcpPort = process.env.TCP_PORT || 43594;
-    const websocketPort = process.env.WEBSOCKET_PORT || 43595;
-
-    // Start your server
-    const tcpServer = startTCPServer(tcpPort);
-    const wsServer = startWebSocketServer(websocketPort);
-
-    // Connect to data server
-    const dataClient = connectToDataServer();
-
-    // Your server logic here...
-
-    function startTCPServer(port) {
-        // TCP server logic
-        console.log(`TCP server listening on port ${port}`);
+    try {
+        const server = new Server(config);
+        await server.init();
+        log.info('Server initialized successfully');
+    } catch (e) {
+        process.exitCode = 1;
+        log.error('Failed to initialize server:', e);
     }
-
-    function startWebSocketServer(port) {
-        // WebSocket server logic
-        console.log(`WebSocket server listening on port ${port}`);
-    }
-})();
+})().catch(err => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+});
