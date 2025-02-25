@@ -260,5 +260,7 @@ function connectToDataServer() {
     return client;
 }
 
-// Export both the class and the function
-module.exports = { DataClient, connectToDataServer };
+// Export the DataClient class directly as the default export
+module.exports = DataClient;
+// Also export the connectToDataServer function
+module.exports.connectToDataServer = connectToDataServer;
