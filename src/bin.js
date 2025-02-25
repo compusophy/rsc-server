@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 
+// For local development only, not needed in production
 if (process.env.NODE_ENV !== 'production') {
+  try {
     require('dotenv').config();
+  } catch (e) {
+    console.log('No .env file found, using default environment');
+  }
 }
 
+// Rest of your imports and code
+const process = require('process');
 const Server = require('./server');
 const bole = require('bole');
 const fs = require('fs').promises;
 const pkg = require('../package');
-const process = require('process');
 const yargs = require('yargs');
 const { connectToDataServer } = require('./data-client');
 
