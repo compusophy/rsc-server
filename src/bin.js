@@ -17,6 +17,7 @@ const fs = require('fs').promises;
 const pkg = require('../package');
 const yargs = require('yargs');
 const { connectToDataServer } = require('./data-client');
+const { loadConfig } = require('./config');
 
 const log = require('bole')('bin');
 
@@ -47,7 +48,7 @@ bole.output({
     let config;
 
     try {
-        config = JSON.parse(await fs.readFile(argv.config));
+        config = await loadConfig(argv.config);
     } catch (e) {
         process.exitCode = 1;
         log.error(e);

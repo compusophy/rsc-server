@@ -1,9 +1,9 @@
 {
-    "dataServerTCP": "localhost:9001",
+    "dataServerTCP": "rsc-data-server.railway.internal:9001",
     "dataServerPassword": "test",
     "port": 9002,
     "sockFile": null,
-    "sqliteFile": "./rsc-data-server.sqlite",
+    "sqliteFile": null,
     "backupDirectory": "./backups",
     "password": "test",
     "passwordHashRounds": 10,
