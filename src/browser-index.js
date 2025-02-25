@@ -23,14 +23,14 @@ const bole = require('bole');
 })();
 
 function getSecureWebSocketUrl(host = null, port = null) {
-    // Default to secure WebSockets
-    const protocol = (typeof window !== 'undefined' && window.location.protocol === 'http:') ? 'ws:' : 'wss:';
+    // Always use secure WebSockets for secure pages
+    const protocol = 'wss:';
     
     // Use provided host or default
-    const wsHost = host || (typeof window !== 'undefined' && window.serverAddress) || 'rsc-server-production.up.railway.app';
+    const wsHost = host || 'shinkansen.proxy.rlwy.net';
     
     // Use provided port or default
-    const wsPort = port || 43595;
+    const wsPort = port || 55656;
     
     return `${protocol}//${wsHost}:${wsPort}`;
 }
