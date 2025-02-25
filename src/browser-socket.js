@@ -6,9 +6,9 @@ class BrowserSocket extends EventEmitter {
         this.id = id;
         
         // Use the provided IP or a default that works with Railway
-        // This ensures the socket uses the correct remote address
+        // For browser clients, we need a public, secure endpoint
         this.remoteAddress = ip || (typeof window !== 'undefined' && window.serverAddress) || 
-                             'rsc-server.railway.internal';
+                             'shinkansen.proxy.rlwy.net';
     }
 
     write(data) {

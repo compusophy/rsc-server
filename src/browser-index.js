@@ -21,3 +21,16 @@ const bole = require('bole');
         }
     });
 })();
+
+function getSecureWebSocketUrl(host = null, port = null) {
+    // Default to secure WebSockets
+    const protocol = (typeof window !== 'undefined' && window.location.protocol === 'http:') ? 'ws:' : 'wss:';
+    
+    // Use provided host or default
+    const wsHost = host || (typeof window !== 'undefined' && window.serverAddress) || 'rsc-server-production.up.railway.app';
+    
+    // Use provided port or default
+    const wsPort = port || 43595;
+    
+    return `${protocol}//${wsHost}:${wsPort}`;
+}
