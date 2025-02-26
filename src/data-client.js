@@ -7,11 +7,6 @@ const uid = require('rand-token').uid;
 
 const TIMEOUT = 10000;
 
-// Use environment variables with fallbacks for local development
-const dataServerHost = process.env.DATA_SERVER_HOST || 'localhost';
-const dataServerPort = process.env.DATA_SERVER_PORT || 9001;
-const dataServerPassword = process.env.DATA_SERVER_PASSWORD || 'test';
-
 class DataClient {
     constructor(server) {
         this.server = server;
@@ -172,9 +167,11 @@ class DataClient {
     }
 
     async authenticate() {
+        const { config } = this.server;
+        
         const result = await this.sendAndReceive({
             handler: 'authenticate',
-            password: dataServerPassword
+            password: config.dataServerPassword
         });
 
         if (!result.success) {
@@ -242,25 +239,4 @@ class DataClient {
     }
 }
 
-function connectToDataServer() {
-    const client = new net.Socket();
-    
-    client.connect(dataServerPort, dataServerHost, () => {
-        console.log(`Connected to data server at ${dataServerHost}:${dataServerPort}`);
-        // Your authentication logic here using dataServerPassword
-    });
-    
-    // Add error handling
-    client.on('error', (err) => {
-        console.error('Data server connection error:', err);
-        // Implement reconnection logic here
-        setTimeout(connectToDataServer, 5000); // Try to reconnect after 5 seconds
-    });
-    
-    return client;
-}
-
-// Export the DataClient class directly as the default export
 module.exports = DataClient;
-// Also export the connectToDataServer function
-module.exports.connectToDataServer = connectToDataServer;

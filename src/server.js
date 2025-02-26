@@ -11,6 +11,7 @@ const net = require('net');
 const packetHandlers = require('./packet-handlers');
 const toBuffer = process.browser ? require('typedarray-to-buffer') : undefined;
 const ws = require('ws');
+const http = require('http');
 
 class Server {
     constructor(config) {
@@ -103,6 +104,7 @@ class Server {
 
             this.tcpServer.once('listening', () => {
                 this.tcpServer.removeListener('error', reject);
+                const port = this.config.tcpPort;
                 log.info(`listening for TCP connections on port ${port}`);
                 resolve();
             });
@@ -113,34 +115,31 @@ class Server {
     }
 
     bindWebSocket() {
-        const port = this.config.websocketPort;
-
-        // Configure WebSocket server with options needed for secure connections
-        const options = {
-            port,
-            // These options help with secure WebSockets behind a proxy
-            perMessageDeflate: {
-                zlibDeflateOptions: {
-                    finishFlush: require('zlib').Z_SYNC_FLUSH
-                }
-            }
-        };
-
-        this.websocketServer = new ws.Server(options);
+        // Create an HTTP server
+        const server = http.createServer((req, res) => {
+            res.writeHead(200);
+            res.end('RSC WebSocket Server');
+        });
+        
+        // Attach WebSocket server to the HTTP server
+        this.websocketServer = new ws.Server({ 
+            server,
+            path: '/ws' // WebSockets will be available at /ws path
+        });
+        
         this.websocketServer.on('error', (err) => log.error(err));
-
+        
         this.websocketServer.on('connection', (socket, req) => {
-            // Log connection details for debugging
             log.info(`WebSocket connection from ${req.socket.remoteAddress}`);
-            
-            // Check if the connection is secure
-            const isSecure = req.headers['x-forwarded-proto'] === 'https';
-            log.info(`Connection is ${isSecure ? 'secure' : 'not secure'}`);
-            
             this.handleConnection(socket);
         });
-
-        log.info(`listening for websocket connections on port ${port}`);
+        
+        // Railway requires using their PORT environment variable
+        // Fall back to config.port if not in Railway environment
+        const port = process.env.PORT || this.config.port;
+        server.listen(port, () => {
+            log.info(`HTTP server with WebSockets listening on port ${port}`);
+        });
     }
 
     bindWebWorker() {

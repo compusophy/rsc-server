@@ -23,14 +23,12 @@ const bole = require('bole');
 })();
 
 function getSecureWebSocketUrl(host = null, port = null) {
-    // Always use secure WebSockets for secure pages
-    const protocol = 'wss:';
+    // Use the appropriate protocol based on the page's protocol
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     
     // Use provided host or default
     const wsHost = host || 'rsc-server-production.up.railway.app';
     
-    // Use provided port or default
-    const wsPort = port || 43595;
-    
-    return `${protocol}//${wsHost}:${wsPort}`;
+    // Don't use a port, use the /ws path instead
+    return `${protocol}//${wsHost}/ws`;
 }
