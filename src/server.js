@@ -113,34 +113,33 @@ class Server {
     }
 
     bindWebSocket() {
-        const port = this.config.websocketPort; // This should be 43595 internally
-        
-        // Configure WebSocket server to work with Railway's proxy
+        const port = this.config.websocketPort;
+
+        // Configure WebSocket server with options needed for secure connections
         const options = {
             port,
-            // This allows the server to work behind a proxy that terminates SSL
+            // These options help with secure WebSockets behind a proxy
             perMessageDeflate: {
                 zlibDeflateOptions: {
-                    // Required for Railway's proxy
                     finishFlush: require('zlib').Z_SYNC_FLUSH
                 }
             }
         };
-        
+
         this.websocketServer = new ws.Server(options);
         this.websocketServer.on('error', (err) => log.error(err));
-        
+
         this.websocketServer.on('connection', (socket, req) => {
-            // Log the connection details to help with debugging
+            // Log connection details for debugging
             log.info(`WebSocket connection from ${req.socket.remoteAddress}`);
             
-            // Check for secure connection
+            // Check if the connection is secure
             const isSecure = req.headers['x-forwarded-proto'] === 'https';
             log.info(`Connection is ${isSecure ? 'secure' : 'not secure'}`);
             
             this.handleConnection(socket);
         });
-        
+
         log.info(`listening for websocket connections on port ${port}`);
     }
 
