@@ -1,4 +1,5 @@
 {
+    "dataServerFile": null,
     "dataServerTCP": "rsc-data-server.railway.internal:9001",
     "dataServerPassword": "test",
     "port": 9002,

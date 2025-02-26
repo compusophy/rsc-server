@@ -23,8 +23,8 @@ const bole = require('bole');
 })();
 
 function getSecureWebSocketUrl(host = null, port = null) {
-    // Use the appropriate protocol based on the page's protocol
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    // Always use secure WebSockets when connecting from an HTTPS page
+    const protocol = 'wss:';
     
     // Use provided host or default
     const wsHost = host || 'rsc-server-production.up.railway.app';
